@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>STWBA</title>
-     <meta charset="UTF-8">
+  <meta charset="UTF-8">
   <style>
     body {
       margin: 0;
@@ -17,53 +17,97 @@
       width: 100%;
       background: #fff;
       display: flex;
-      justify-content: space-around;
       align-items: center;
       height: 60px;
       z-index: 100;
+      justify-content: center;
+      padding: 0 10px;
     }
-    .bottom-bar a {
+    .bottom-bar-scroll {
+      display: flex;
+      overflow: hidden;
+      width: 80vw;
+      max-width: 700px;
+      min-width: 300px;
+      scroll-behavior: smooth;
+      transition: width 0.3s;
+    }
+    .bottom-bar-scroll a {
       color: #595959;
       text-decoration: none;
       font-size: 16px;
       padding: 10px 20px;
       transition: background 0.2s, color 0.2s;
       border-radius: 4px;
+      flex: 0 0 25%; /* 4 items visible */
+      margin: 0 5px;
+      white-space: nowrap;
+      box-sizing: border-box;
     }
-    .bottom-bar a:hover {
+    .bottom-bar-scroll a:hover {
       background: #fff;
       color: #000;
     }
+    .bar-arrow {
+      background: #fff;
+      border: none;
+      font-size: 2rem;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      margin: 0 5px;
+      user-select: none;
+      transition: background 0.2s;
+      z-index: 101;
+      box-shadow: 0 0 4px #eee;
+    }
+    .bar-arrow:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
+    @media (max-width: 600px) {
+      .bottom-bar-scroll {
+        width: 95vw;
+      }
+      .bottom-bar-scroll a {
+        font-size: 14px;
+        padding: 8px 8px;
+      }
+      .bar-arrow {
+        font-size: 1.5rem;
+        width: 32px;
+        height: 32px;
+      }
+    }
   </style>
-    <!-- Title Bar Start -->
-<!-- Title Bar Start -->
-<style>
-  .title-bar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 120px;
-    background: #ffffff00;
-    color: #595959;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: Helvetica, sans-serif;
-    z-index: 1000;
-  }
-  body {
-    margin: 50px;
-    padding-top: 120px; /* Prevents content from hiding behind the bar */
-  }
-</style>
-<header class="title-bar">
-  <div style="font-size: 5rem; font-weight: bold;">
-    SET THE WOODEN BOY AFLAME
-  </div>
-</header>
-<!-- Title Bar End -->
-<!-- Title Bar End -->
+  <!-- Title Bar Start -->
+  <style>
+    .title-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 120px;
+      background: #ffffff00;
+      color: #595959;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Helvetica, sans-serif;
+      z-index: 1000;
+    }
+    body {
+      margin: 50px;
+      padding-top: 120px; /* Prevents content from hiding behind the bar */
+    }
+  </style>
+  <header class="title-bar">
+    <div style="font-size: 5rem; font-weight: bold;">
+      SET THE WOODEN BOY AFLAME
+    </div>
+  </header>
+  <!-- Title Bar End -->
   <style>
     html, body {
       height: 100%;
@@ -174,14 +218,51 @@
     // Start auto-spin
     requestAnimationFrame(animateSpin);
   </script>
- <!-- Page content goes here -->
+  <!-- Page content goes here -->
 
   <div class="bottom-bar">
-    <a href="#vs.html">Merch</a>
-    <a href="BuyAlbum.html">Buy Album</a>
-    <a href="Download.html">Stream Album</a>
-    <a href="vs.html">Socials</a>
+    <button class="bar-arrow left" id="bar-left">&#8592;</button>
+    <div class="bottom-bar-scroll" id="bottom-bar-scroll">
+      <a href="#vs.html">Merch</a>
+      <a href="BuyAlbum.html">Buy Album</a>
+      <a href="Download.html">Stream Album</a>
+      <a href="vs.html">Socials</a>
+      <a href="#news">Philosophy</a>
+      <a href="#tour">Tour</a>
+      <a href="#about">Album Covers</a>
+      <a href="#contact">Sticker Book</a>
+    </div>
+    <button class="bar-arrow right" id="bar-right">&#8594;</button>
   </div>
+  <script>
+    // Scroll logic for the bottom bar
+    const scrollContainer = document.getElementById('bottom-bar-scroll');
+    const leftArrow = document.getElementById('bar-left');
+    const rightArrow = document.getElementById('bar-right');
+
+    function getOptionWidth() {
+      // Use first link as width basis. If no links, return 0.
+      const first = scrollContainer.querySelector('a');
+      return first ? first.offsetWidth + 10 : 100; // 10 is margin
+    }
+
+    function updateArrows() {
+      leftArrow.disabled = scrollContainer.scrollLeft <= 0;
+      rightArrow.disabled = scrollContainer.scrollLeft + scrollContainer.offsetWidth >= scrollContainer.scrollWidth - 1;
+    }
+
+    leftArrow.onclick = () => {
+      scrollContainer.scrollBy({left: -getOptionWidth() * 4, behavior: 'smooth'});
+      setTimeout(updateArrows, 500);
+    };
+    rightArrow.onclick = () => {
+      scrollContainer.scrollBy({left: getOptionWidth() * 4, behavior: 'smooth'});
+      setTimeout(updateArrows, 500);
+    };
+
+    scrollContainer.addEventListener('scroll', updateArrows);
+    window.addEventListener('resize', updateArrows);
+    window.onload = () => setTimeout(updateArrows, 300);
+  </script>
 </body>
 </html>
-
