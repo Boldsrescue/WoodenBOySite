@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>STWBA</title>
+     <meta charset="UTF-8">
+  <style>
+    body {
+      margin: 0;
+      padding-bottom: 60px; /* Enough space for the bar */
+      font-family: Arial, sans-serif;
+    }
+    .bottom-bar {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      background: #fff;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 60px;
+      z-index: 100;
+    }
+    .bottom-bar a {
+      color: #595959;
+      text-decoration: none;
+      font-size: 16px;
+      padding: 10px 20px;
+      transition: background 0.2s, color 0.2s;
+      border-radius: 4px;
+    }
+    .bottom-bar a:hover {
+      background: #fff;
+      color: #000;
+    }
+  </style>
+    <!-- Title Bar Start -->
+<!-- Title Bar Start -->
+<style>
+  .title-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 120px;
+    background: #ffffff00;
+    color: #595959;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: Helvetica, sans-serif;
+    z-index: 1000;
+  }
+  body {
+    margin: 50px;
+    padding-top: 120px; /* Prevents content from hiding behind the bar */
+  }
+</style>
+<header class="title-bar">
+  <div style="font-size: 5rem; font-weight: bold;">
+    SET THE WOODEN BOY AFLAME
+  </div>
+</header>
+<!-- Title Bar End -->
+<!-- Title Bar End -->
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+    }
+    .turntable {
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      user-select: none;
+      touch-action: none;
+      background: #222;
+      cursor: grab;
+    }
+    .turntable:active {
+      cursor: grabbing;
+    }
+    .turntable img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      display: block;
+      pointer-events: none;
+      will-change: transform;
+    }
+  </style>
+</head>
+<body>
+  <div class="turntable" id="turntable">
+    <img src="https://github.com/Boldsrescue/KanyeWest/blob/main/New%20Project%20(1).png?raw=true" alt="DJ Turntable" id="platter" />
+  </div>
+  <script>
+    const turntable = document.getElementById('turntable');
+    const platter = document.getElementById('platter');
+    let isDragging = false;
+    let lastAngle = 0;
+    let currentRotation = 0;
+    let autoSpin = true;
+    let lastTimestamp = null;
+    let spinSpeed = 45; // degrees per second
+
+    function getAngle(e) {
+      const rect = turntable.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      const dx = clientX - cx;
+      const dy = clientY - cy;
+      return Math.atan2(dy, dx) * (180 / Math.PI);
+    }
+
+    function animateSpin(timestamp) {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+      if (autoSpin && !isDragging) {
+        currentRotation += spinSpeed * delta;
+        platter.style.transform = `rotate(${currentRotation}deg)`;
+      }
+      requestAnimationFrame(animateSpin);
+    }
+
+    function onPointerDown(e) {
+      e.preventDefault();
+      isDragging = true;
+      autoSpin = false;
+      lastAngle = getAngle(e);
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      const angle = getAngle(e);
+      let delta = angle - lastAngle;
+      if (delta > 180) delta -= 360;
+      if (delta < -180) delta += 360;
+      currentRotation += delta;
+      platter.style.transform = `rotate(${currentRotation}deg)`;
+      lastAngle = angle;
+    }
+
+    function onPointerUp() {
+      isDragging = false;
+      autoSpin = true;
+    }
+
+    // Mouse events
+    turntable.addEventListener('mousedown', onPointerDown);
+    window.addEventListener('mousemove', onPointerMove);
+    window.addEventListener('mouseup', onPointerUp);
+
+    // Touch events
+    turntable.addEventListener('touchstart', onPointerDown, {passive: false});
+    window.addEventListener('touchmove', onPointerMove, {passive: false});
+    window.addEventListener('touchend', onPointerUp);
+
+    // Start auto-spin
+    requestAnimationFrame(animateSpin);
+  </script>
+ <!-- Page content goes here -->
+
+  <div class="bottom-bar">
+    <a href="#vs.html">Merch</a>
+    <a href="BuyAlbum.html">Buy Album</a>
+    <a href="Download.html">Download Album</a>
+    <a href="vs.html">Socials</a>
+  </div>
+</body>
+</html>
